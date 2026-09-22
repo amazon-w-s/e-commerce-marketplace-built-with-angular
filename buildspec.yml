@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - npm install -g @angular/cli
+      - npm install
+
+  build:
+    commands:
+      - ng build --configuration production
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: dist/your-app-name   # Replace with your actual app name
