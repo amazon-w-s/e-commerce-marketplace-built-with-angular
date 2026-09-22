@@ -1,0 +1,47 @@
+.auth-page {
+  display: flex;
+  justify-content: center;
+  padding-block: 64px 100px;
+}
+
+.auth-card {
+  max-width: 420px;
+  width: 100%;
+  background: var(--mat-sys-surface-container-low);
+  border-radius: 20px;
+  padding: 40px;
+
+  h1 {
+    margin: 0 0 8px;
+  }
+}
+
+.subtitle {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 14px;
+  margin: 0 0 24px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.error-message {
+  color: var(--mat-sys-error);
+  font-size: 13px;
+  margin: 0 0 8px;
+}
+
+.switch-auth {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 20px;
+
+  a {
+    color: var(--mat-sys-primary);
+    font-weight: 600;
+    text-decoration: none;
+  }
+}

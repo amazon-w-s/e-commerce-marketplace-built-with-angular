@@ -1,0 +1,130 @@
+@if (product(); as p) {
+  <div class="page-container product-detail-page">
+    <nav class="breadcrumbs">
+      <a routerLink="/">Home</a>
+      <span>/</span>
+      <a routerLink="/products">Products</a>
+      @if (category(); as c) {
+        <span>/</span>
+        <a [routerLink]="['/products']" [queryParams]="{ category: c.id }">{{ c.name }}</a>
+      }
+    </nav>
+
+    <div class="detail-grid">
+      <div class="gallery">
+        <div class="main-image">
+          <img [src]="p.images[activeImage()]" [alt]="p.name" />
+          @if (p.isNew) {
+            <span class="badge new">New</span>
+          }
+          @if (discountPercent() > 0) {
+            <span class="badge sale">-{{ discountPercent() }}%</span>
+          }
+        </div>
+        @if (p.images.length > 1) {
+          <div class="thumbnails">
+            @for (image of p.images; track $index) {
+              <button
+                class="thumb"
+                [class.active]="$index === activeImage()"
+                (click)="activeImage.set($index)"
+              >
+                <img [src]="image" [alt]="p.name + ' view ' + ($index + 1)" />
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="summary">
+        <span class="seller">{{ p.seller }}</span>
+        <h1>{{ p.name }}</h1>
+        <app-star-rating [rating]="p.rating" [reviewCount]="p.reviewCount" [showValue]="true" />
+
+        <div class="price-row">
+          <span class="price">{{ p.price | currency }}</span>
+          @if (p.originalPrice) {
+            <span class="original-price">{{ p.originalPrice | currency }}</span>
+          }
+        </div>
+
+        <p class="description">{{ p.description }}</p>
+
+        @if (p.stock === 0) {
+          <p class="stock out">Currently out of stock</p>
+        } @else if (p.stock <= 5) {
+          <p class="stock low">Only {{ p.stock }} left in stock — order soon</p>
+        } @else {
+          <p class="stock in">In stock</p>
+        }
+
+        <div class="purchase-row">
+          <div class="quantity-selector">
+            <button mat-icon-button (click)="decrementQuantity()" [disabled]="quantity() <= 1">
+              <span class="material-symbols-outlined">remove</span>
+            </button>
+            <span class="quantity-value">{{ quantity() }}</span>
+            <button
+              mat-icon-button
+              (click)="incrementQuantity()"
+              [disabled]="quantity() >= p.stock"
+            >
+              <span class="material-symbols-outlined">add</span>
+            </button>
+          </div>
+          <button
+            mat-flat-button
+            color="primary"
+            [disabled]="p.stock === 0"
+            (click)="addToCart()"
+          >
+            <span class="material-symbols-outlined">add_shopping_cart</span>
+            Add to Cart
+          </button>
+          <button mat-stroked-button [disabled]="p.stock === 0" (click)="buyNow()">Buy Now</button>
+        </div>
+
+        <div class="trust-badges">
+          <span><span class="material-symbols-outlined">local_shipping</span> Free shipping over $75</span>
+          <span><span class="material-symbols-outlined">replay</span> 30-day returns</span>
+          <span><span class="material-symbols-outlined">verified</span> Secure checkout</span>
+        </div>
+      </div>
+    </div>
+
+    <mat-tab-group class="detail-tabs">
+      <mat-tab label="Description">
+        <p class="tab-content">{{ p.longDescription }}</p>
+      </mat-tab>
+      <mat-tab label="Specifications">
+        <ul class="tab-content specs">
+          <li><strong>Category:</strong> {{ category()?.name }}</li>
+          <li><strong>Seller:</strong> {{ p.seller }}</li>
+          <li><strong>Tags:</strong> {{ p.tags.join(', ') }}</li>
+        </ul>
+      </mat-tab>
+      <mat-tab [label]="'Reviews (' + p.reviewCount + ')'">
+        <div class="tab-content">
+          <app-star-rating [rating]="p.rating" [showValue]="true" />
+          <p>Reviews from {{ p.reviewCount }} verified buyers.</p>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    @if (relatedProducts().length > 0) {
+      <section class="related">
+        <h2>You may also like</h2>
+        <div class="product-grid">
+          @for (related of relatedProducts(); track related.id) {
+            <app-product-card [product]="related" (addToCart)="onRelatedAddToCart($event)" />
+          }
+        </div>
+      </section>
+    }
+  </div>
+} @else {
+  <div class="page-container not-found-product">
+    <h1>Product not found</h1>
+    <a mat-flat-button color="primary" routerLink="/products">Back to Shop</a>
+  </div>
+}

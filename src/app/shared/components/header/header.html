@@ -1,0 +1,82 @@
+<header class="site-header">
+  <div class="top-bar page-container">
+    <a routerLink="/" class="logo" (click)="closeMobileMenu()">
+      <span class="material-symbols-outlined">storefront</span>
+      Marketplace
+    </a>
+
+    <form class="search-form" (ngSubmit)="onSearch()">
+      <span class="material-symbols-outlined">search</span>
+      <input
+        type="search"
+        name="search"
+        placeholder="Search products, brands and categories"
+        [(ngModel)]="searchTerm"
+        aria-label="Search products"
+      />
+      <button mat-flat-button type="submit">Search</button>
+    </form>
+
+    <div class="actions">
+      @if (currentUser(); as user) {
+        <button mat-icon-button [matMenuTriggerFor]="userMenu" aria-label="Account menu">
+          <span class="avatar">{{ initials() }}</span>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <div class="menu-header">Hi, {{ user.name }}</div>
+          <a mat-menu-item routerLink="/account/orders">
+            <span class="material-symbols-outlined">receipt_long</span>
+            My Orders
+          </a>
+          <button mat-menu-item (click)="logout()">
+            <span class="material-symbols-outlined">logout</span>
+            Sign Out
+          </button>
+        </mat-menu>
+      } @else {
+        <a mat-button routerLink="/auth/login" class="desktop-only">
+          <span class="material-symbols-outlined">person</span>
+          Sign In
+        </a>
+      }
+
+      <a
+        mat-icon-button
+        routerLink="/cart"
+        aria-label="View cart"
+        [matBadge]="cartCount() > 0 ? cartCount() : null"
+        matBadgeColor="accent"
+        matBadgeSize="small"
+      >
+        <span class="material-symbols-outlined">shopping_bag</span>
+      </a>
+
+      <button
+        mat-icon-button
+        class="menu-toggle"
+        (click)="toggleMobileMenu()"
+        aria-label="Toggle menu"
+      >
+        <span class="material-symbols-outlined">{{ mobileMenuOpen() ? 'close' : 'menu' }}</span>
+      </button>
+    </div>
+  </div>
+
+  <nav class="category-nav" [class.open]="mobileMenuOpen()">
+    <a routerLink="/products" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu()">
+      All Products
+    </a>
+    @for (category of categories(); track category.id) {
+      <a
+        [routerLink]="['/products']"
+        [queryParams]="{ category: category.id }"
+        (click)="closeMobileMenu()"
+      >
+        {{ category.name }}
+      </a>
+    }
+    @if (!currentUser()) {
+      <a routerLink="/auth/login" class="mobile-only" (click)="closeMobileMenu()">Sign In</a>
+    }
+  </nav>
+</header>

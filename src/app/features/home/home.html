@@ -1,0 +1,60 @@
+<section class="hero">
+  <div class="page-container hero-inner">
+    <div class="hero-copy">
+      <span class="eyebrow">New season arrivals</span>
+      <h1>Everything you need, curated in one marketplace.</h1>
+      <p>
+        Discover electronics, fashion, home essentials, sports gear, beauty and books — all from
+        trusted sellers, delivered fast.
+      </p>
+      <div class="hero-actions">
+        <a mat-flat-button color="primary" routerLink="/products">Shop All Products</a>
+        <a mat-stroked-button [routerLink]="['/products']" [queryParams]="{ category: 'electronics' }">
+          Explore Electronics
+        </a>
+      </div>
+    </div>
+    <div class="hero-media">
+      <img src="https://picsum.photos/seed/marketplace-hero/900/700" alt="Featured products" loading="eager" />
+    </div>
+  </div>
+</section>
+
+<section class="categories page-container">
+  <div class="section-header">
+    <h2>Shop by Category</h2>
+  </div>
+  <div class="category-grid">
+    @for (category of categories(); track category.id) {
+      <a class="category-card" [routerLink]="['/products']" [queryParams]="{ category: category.id }">
+        <span class="material-symbols-outlined">{{ category.icon }}</span>
+        <span class="category-name">{{ category.name }}</span>
+      </a>
+    }
+  </div>
+</section>
+
+<section class="featured page-container">
+  <div class="section-header">
+    <h2>Featured Products</h2>
+    <a routerLink="/products" class="view-all">
+      View all
+      <span class="material-symbols-outlined">arrow_forward</span>
+    </a>
+  </div>
+  <div class="product-grid">
+    @for (product of featuredProducts(); track product.id) {
+      <app-product-card [product]="product" (addToCart)="onAddToCart($event)" />
+    }
+  </div>
+</section>
+
+<section class="promo page-container">
+  <div class="promo-banner">
+    <div>
+      <h2>Free shipping on orders over $75</h2>
+      <p>Plus easy 30-day returns on every order. Shop with confidence.</p>
+    </div>
+    <a mat-flat-button color="tertiary" routerLink="/products">Start Shopping</a>
+  </div>
+</section>

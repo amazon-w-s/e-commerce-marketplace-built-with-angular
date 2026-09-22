@@ -1,0 +1,83 @@
+<div class="page-container product-list-page">
+  <aside class="filters">
+    <div class="filter-block">
+      <h3>Search</h3>
+      <mat-form-field appearance="outline" class="full-width">
+        <input
+          matInput
+          [ngModel]="filter().query"
+          (ngModelChange)="onSearchChange($event)"
+          placeholder="Search products"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="filter-block">
+      <h3>Category</h3>
+      @for (category of categories(); track category.id) {
+        <mat-checkbox
+          [checked]="filter().categoryIds.includes(category.id)"
+          (change)="toggleCategory(category.id, $event.checked)"
+        >
+          {{ category.name }}
+        </mat-checkbox>
+      }
+    </div>
+
+    <div class="filter-block">
+      <h3>Max Price: {{ filter().maxPrice | currency }}</h3>
+      <mat-slider [min]="0" [max]="maxPrice" [step]="5" class="full-width">
+        <input
+          matSliderThumb
+          [ngModel]="filter().maxPrice"
+          (ngModelChange)="onPriceChange($event)"
+        />
+      </mat-slider>
+    </div>
+
+    <div class="filter-block">
+      <h3>Minimum Rating</h3>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-select
+          [ngModel]="filter().minRating"
+          (ngModelChange)="productService.updateFilter({ minRating: $event })"
+        >
+          <mat-option [value]="0">Any rating</mat-option>
+          <mat-option [value]="4">4 stars & up</mat-option>
+          <mat-option [value]="4.5">4.5 stars & up</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <button mat-stroked-button class="full-width" (click)="clearFilters()">Clear Filters</button>
+  </aside>
+
+  <section class="results">
+    <div class="results-header">
+      <span class="result-count">{{ filteredProducts().length }} products</span>
+      <mat-form-field appearance="outline" class="sort-field">
+        <mat-select [ngModel]="filter().sort" (ngModelChange)="onSortChange($event)">
+          <mat-option value="relevance">Relevance</mat-option>
+          <mat-option value="price-asc">Price: Low to High</mat-option>
+          <mat-option value="price-desc">Price: High to Low</mat-option>
+          <mat-option value="rating">Highest Rated</mat-option>
+          <mat-option value="newest">Newest</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    @if (filteredProducts().length > 0) {
+      <div class="product-grid">
+        @for (product of filteredProducts(); track product.id) {
+          <app-product-card [product]="product" (addToCart)="onAddToCart($event)" />
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <span class="material-symbols-outlined">search_off</span>
+        <p>No products match your filters.</p>
+        <button mat-flat-button color="primary" (click)="clearFilters()">Clear Filters</button>
+      </div>
+    }
+  </section>
+</div>

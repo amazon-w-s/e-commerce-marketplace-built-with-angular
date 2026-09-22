@@ -1,0 +1,53 @@
+<footer class="site-footer">
+  <div class="page-container footer-grid">
+    <div class="brand-col">
+      <div class="logo">
+        <span class="material-symbols-outlined">storefront</span>
+        Marketplace
+      </div>
+      <p>Your destination for electronics, fashion, home, sports, beauty and books.</p>
+      <div class="socials">
+        <a href="#" aria-label="Facebook"><span class="material-symbols-outlined">public</span></a>
+        <a href="#" aria-label="Instagram"><span class="material-symbols-outlined">photo_camera</span></a>
+        <a href="#" aria-label="X"><span class="material-symbols-outlined">alternate_email</span></a>
+      </div>
+    </div>
+
+    <div class="link-col">
+      <h4>Shop</h4>
+      <a routerLink="/products">All Products</a>
+      <a [routerLink]="['/products']" [queryParams]="{ category: 'electronics' }">Electronics</a>
+      <a [routerLink]="['/products']" [queryParams]="{ category: 'fashion' }">Fashion</a>
+      <a [routerLink]="['/products']" [queryParams]="{ category: 'home-living' }">Home & Living</a>
+    </div>
+
+    <div class="link-col">
+      <h4>Account</h4>
+      <a routerLink="/auth/login">Sign In</a>
+      <a routerLink="/auth/register">Create Account</a>
+      <a routerLink="/account/orders">Order History</a>
+      <a routerLink="/cart">My Cart</a>
+    </div>
+
+    <div class="newsletter-col">
+      <h4>Stay in the loop</h4>
+      <p>Get updates on new arrivals and exclusive offers.</p>
+      <form class="newsletter-form" (ngSubmit)="subscribe()">
+        <input
+          type="email"
+          name="email"
+          placeholder="you@example.com"
+          [(ngModel)]="email"
+          aria-label="Email address"
+          required
+        />
+        <button mat-flat-button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="page-container bottom-bar">
+    <span>&copy; {{ year }} Marketplace. All rights reserved.</span>
+    <span>Built with Angular · Deployed on Azure Static Web Apps</span>
+  </div>
+</footer>

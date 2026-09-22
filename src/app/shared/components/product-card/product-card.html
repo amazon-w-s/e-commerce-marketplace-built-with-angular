@@ -1,0 +1,39 @@
+<a class="product-card" [routerLink]="['/products', product().id]">
+  <div class="media">
+    <img [src]="product().image" [alt]="product().name" loading="lazy" />
+    <div class="badges">
+      @if (product().isNew) {
+        <span class="badge new">New</span>
+      }
+      @if (discountPercent() > 0) {
+        <span class="badge sale">-{{ discountPercent() }}%</span>
+      }
+    </div>
+    <button
+      mat-icon-button
+      class="quick-add"
+      [disabled]="product().stock === 0"
+      (click)="onAddToCart($event)"
+      [attr.aria-label]="'Add ' + product().name + ' to cart'"
+    >
+      <span class="material-symbols-outlined">add_shopping_cart</span>
+    </button>
+  </div>
+
+  <div class="info">
+    <span class="seller">{{ product().seller }}</span>
+    <h3 class="name">{{ product().name }}</h3>
+    <app-star-rating [rating]="product().rating" [reviewCount]="product().reviewCount" />
+    <div class="price-row">
+      <span class="price">{{ product().price | currency }}</span>
+      @if (product().originalPrice) {
+        <span class="original-price">{{ product().originalPrice | currency }}</span>
+      }
+    </div>
+    @if (product().stock === 0) {
+      <span class="stock out">Out of stock</span>
+    } @else if (product().stock <= 5) {
+      <span class="stock low">Only {{ product().stock }} left</span>
+    }
+  </div>
+</a>

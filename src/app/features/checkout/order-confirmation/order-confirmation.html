@@ -1,0 +1,50 @@
+@if (order(); as o) {
+  <div class="page-container confirmation-page">
+    <div class="confirmation-card">
+      <span class="material-symbols-outlined success-icon">check_circle</span>
+      <h1>Thank you, {{ o.shipping.fullName.split(' ')[0] }}!</h1>
+      <p>Your order has been placed successfully.</p>
+      <div class="order-meta">
+        <span>Order #{{ o.id }}</span>
+        <span>{{ o.placedAt | date: 'medium' }}</span>
+      </div>
+
+      <div class="items-list">
+        @for (item of o.items; track item.product.id) {
+          <div class="item-row">
+            <img [src]="item.product.image" [alt]="item.product.name" />
+            <div class="info">
+              <span class="name">{{ item.product.name }}</span>
+              <span class="qty">Qty {{ item.quantity }}</span>
+            </div>
+            <span class="price">{{ item.product.price * item.quantity | currency }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="totals">
+        <div class="row"><span>Subtotal</span><span>{{ o.subtotal | currency }}</span></div>
+        <div class="row"><span>Shipping</span><span>{{ o.shippingCost === 0 ? 'Free' : (o.shippingCost | currency) }}</span></div>
+        <div class="row"><span>Tax</span><span>{{ o.tax | currency }}</span></div>
+        <div class="row total"><span>Total</span><span>{{ o.total | currency }}</span></div>
+      </div>
+
+      <div class="shipping-info">
+        <h3>Shipping to</h3>
+        <p>
+          {{ o.shipping.fullName }}<br />
+          {{ o.shipping.address }}<br />
+          {{ o.shipping.city }}, {{ o.shipping.state }} {{ o.shipping.zip }}<br />
+          {{ o.shipping.country }}
+        </p>
+      </div>
+
+      <a mat-flat-button color="primary" routerLink="/products">Continue Shopping</a>
+    </div>
+  </div>
+} @else {
+  <div class="page-container confirmation-page">
+    <h1>Order not found</h1>
+    <a mat-flat-button color="primary" routerLink="/">Back to Home</a>
+  </div>
+}
